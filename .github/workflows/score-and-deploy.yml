@@ -1,11 +1,19 @@
 name: Score Companies & Deploy
 
 on:
-  # Weekly on Monday at 06:00 UTC
   schedule:
-    - cron: '0 6 * * 1'
-  # Allow manual trigger
+    # Daily at 06:00 UTC
+    - cron: '0 6 * * *'
   workflow_dispatch:
+    inputs:
+      discover:
+        description: 'Run company discovery (otherwise only scores)'
+        type: boolean
+        default: false
+      batch_size:
+        description: 'Companies to score in this run'
+        type: string
+        default: '15'
 
 permissions:
   contents: write
@@ -32,21 +40,40 @@ jobs:
         working-directory: pipeline
         run: npm install
 
+      # Monday or manual trigger with discover=true: discover companies
+      - name: Check if Monday
+        id: day
+        run: echo "dow=$(date -u +%u)" >> $GITHUB_OUTPUT
+
       - name: Discover top IT companies
+        if: steps.day.outputs.dow == '1' || (github.event_name == 'workflow_dispatch' && inputs.discover == true)
         working-directory: pipeline
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: node discover.js --count 100
 
-      - name: Score companies with web search
+      # Daily: score a batch of unscored companies
+      - name: Score daily batch
         working-directory: pipeline
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: node run.js --batch companies.json --out results.json
+        run: |
+          BATCH_SIZE="${{ github.event.inputs.batch_size || '15' }}"
+          node batch-score.js --batch-size "$BATCH_SIZE" --max-searches 10
 
+      # Generate frontend data from accumulated results
       - name: Generate frontend data
         working-directory: pipeline
         run: node build-frontend-data.js
+
+      # Commit updated pipeline data back to repo
+      - name: Commit pipeline data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pipeline/companies.json pipeline/company-meta.json pipeline/results.json src/data/companies.js || true
+          git diff --staged --quiet || git commit -m "Update Evil Index scores [automated]"
+          git push || true
 
       - name: Install frontend dependencies
         run: npm install
