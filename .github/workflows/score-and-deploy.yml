@@ -32,6 +32,12 @@ jobs:
         working-directory: pipeline
         run: npm install
 
+      - name: Discover top IT companies
+        working-directory: pipeline
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node discover.js --count 100
+
       - name: Score companies with web search
         working-directory: pipeline
         env:
