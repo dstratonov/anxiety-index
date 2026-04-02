@@ -66,6 +66,24 @@ const App = () => {
         />
 
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '8px 32px 60px' }}>
+          <div style={{
+            background: 'rgba(255,255,255,0.03)',
+            border: '1px solid rgba(255,255,255,0.06)',
+            borderRadius: 6,
+            padding: '10px 16px',
+            marginBottom: 16,
+            fontSize: 10,
+            lineHeight: 1.7,
+            color: 'rgba(255,255,255,0.35)',
+            fontFamily: "'JetBrains Mono', monospace",
+            textAlign: 'center',
+          }}>
+            All data on this site is collected and analyzed entirely by AI. Scores are generated
+            automatically based on publicly available information and may not accurately reflect actual
+            working conditions. This is an experimental project &mdash; please do not treat these scores
+            as definitive judgments. Always do your own research.
+          </div>
+
           <div
             style={{
               display: 'flex',
@@ -118,22 +136,6 @@ const App = () => {
             lineHeight: 1.8,
           }}
         >
-          <div style={{
-            background: 'rgba(255,255,255,0.03)',
-            border: '1px solid rgba(255,255,255,0.06)',
-            borderRadius: 6,
-            padding: '12px 20px',
-            maxWidth: 700,
-            margin: '0 auto 16px',
-            fontSize: 10,
-            lineHeight: 1.8,
-            color: 'rgba(255,255,255,0.35)',
-          }}>
-            All data on this site is collected and analyzed entirely by AI. Scores are generated automatically
-            based on publicly available information and may not accurately reflect actual working conditions.
-            This is an experimental project &mdash; please do not treat these scores as definitive judgments
-            about any company. Always do your own research.
-          </div>
           ANXIETY INDEX v0.1.0 &middot; FOR INFORMATIONAL AND ENTERTAINMENT PURPOSES ONLY
         </footer>
       </div>
