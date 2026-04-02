@@ -136,9 +136,9 @@ const TrendIndicator = ({ trend }) => {
 
 const ConfidenceBadge = ({ level }) => {
   const config = {
-    high: { color: '#00e676', label: 'HIGH CONFIDENCE', bars: 3 },
-    medium: { color: '#ffc400', label: 'MEDIUM CONFIDENCE', bars: 2 },
-    low: { color: '#ff1744', label: 'LOW CONFIDENCE', bars: 1 },
+    high: { color: '#00e676', label: 'RICH DATA', bars: 3 },
+    medium: { color: '#ffc400', label: 'SOME DATA', bars: 2 },
+    low: { color: '#ff1744', label: 'LIMITED DATA', bars: 1 },
   };
   const c = config[level] || config.medium;
 
@@ -392,8 +392,8 @@ const CompanyCard = ({ company, index }) => {
                         <span style={{ color, fontSize: 9, opacity: 0.7 }}>{score}/100</span>
                       )}
                       {conf && (
-                        <span style={{ color: confColor, fontSize: 10, opacity: 0.7, letterSpacing: '1px' }}>
-                          {conf.toUpperCase()}
+                        <span style={{ color: confColor, fontSize: 9, opacity: 0.7 }}>
+                          {conf === 'high' ? '\u25CF\u25CF\u25CF' : conf === 'medium' ? '\u25CF\u25CF\u25CB' : '\u25CF\u25CB\u25CB'} data
                         </span>
                       )}
                     </div>
